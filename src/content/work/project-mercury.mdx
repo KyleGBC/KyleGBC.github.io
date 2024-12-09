@@ -142,6 +142,10 @@ The actual deadeye ability is a combination of helper functions and one behemoth
 This is responsible for camera effects, moving the view to each target, and shooting.
 ![](/assets/project-mercury/deadeye_impl.png)
 
+### Optimization 
+***didn't have time to write-up D:***  
+***TLDR I spent a bunch of time trying and failing to make the game run better, learned a lot of really cool stuff about the engine in the process***
+
 ### Miscellaneous
 A brief mention on some other tasks I worked on.
 #### Environment Searchlight Drones
@@ -154,3 +158,18 @@ In order to create the feeling of the HUD being projected in front of the player
 ![](/assets/project-mercury/curve-shader-code.png)
 ![](/assets/project-mercury/curve-uv-checker.png)
 ![](/assets/project-mercury/curve-in-game-2.png)
+
+
+### Takeaways and the Future
+Over the course of this project, I've of course learned a lot about developing with Unreal Engine 5, and the differences and tradeoffs it has compared to all of my previous experience with Unity.
+To me, Unity is a sandbox, and everything is there for you to do. But by the same token, everything there is to be done by you. As an engine, Unreal is a much more complicated beast. 
+But due to that, you also get so much nicer defaults in every corner of the engine. For instance, with networking. I'm under the impression, it's been a weak spot of Unity until quite recently. But in Unreal, a lot of it is just there, ready to be used. 
+The player controller I developed, because it fit into the Unreal Gameplay Framework, had networked support for the first chunk of this project. It's only due to time constraints that I didn't keep on-top of making it stay that way. As an aside, getting the rest of the new state I created replicated is definitely something I want to finish up in the future.  
+Because of this dichotomy, when it comes to technical skills, I feel that I lot of what I learned this semester was just me learning the "Unreal Way" of getting it done.
+That's not to say I didn't overall learn a lot and improve as a game developer. I feel like I've gained the bedrock knowledge needed to make the next game I work on a highly polished and extremely robust machine.   
+I learned about creating lower-level but still extensible systems from working on the character movement component, creating super adapatable gameplay systems from creating the lethal system, more than I thought possible about how the engine works from trying (and mostly failing) to optimize our framerates, how to get along with and work together with such a big (for me) team, and so much more in the gaps.
+In the end, I'm so glad I got the opportunity to expand my skills and knowledge in this new engine. 
+My interest remains in challenging myself, taking on the tough problems, and creating systems to solve them. In the short term, I'd like to continue working with Unreal, and put every single thing I learned into making something even bigger and better. 
+  
+Thanks! :wave:
+
