@@ -1,7 +1,7 @@
 ---
 title: Project Mercury
 publishDate: 2020-03-04 00:00:00
-img: /assets/project-mercury/splash.png
+img: /portfolio/assets/project-mercury/splash.png
 img_alt: The rooftop of a parking garage in a futuristic cyberpunk city
 description: |
   A movement-based first-person shooter that places in the shoes of a lone operative fighting hordes of robots in an urban cyberpunk future
@@ -36,6 +36,9 @@ In order to develop an excellent movement component, we looked towards a game wi
 My work on the character controller for this game could be summarized as trying to reverse engineer what made Titanfall's movement so fluid and addicting.
 
 This was an ongoing process, but I learned so much about how the creators of that game implemented their iconic parkour system, and I took what I learned to create a stripped-down and simplified, but still fun, version into our game.
+
+##### Wall Running
+The most important aspect of the movement system in Project Mercury is the wallrunning. 
 
 ##### Designer Friendly Programming
 All of the low-level physics code I created for the movement component is endlessly tweakable and modifiable via UPROPERTYs, so that designer can independently tune in the feel of the component based on player feedback for tight iteration cycles.
