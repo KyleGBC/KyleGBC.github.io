@@ -41,6 +41,34 @@ This was an ongoing process, but I learned so much about how the creators of tha
 
 ##### Wall Running
 The most important aspect of the movement system in Project Mercury is the wallrunning. It's logic begins here:
+![](/assets/project-mercury/UpdateCharacterStateBeforeMovement.png)
+The base class implementation of the CharacterMovementComponent executes this function at the end of every frame to see if the current movement mode has changed. If the character is falling, and the the `CanWallRun` function returns true, the state is changed to initiate a wallrun.
+![](/assets/project-mercury/OnMovementModeChanged.png)
+Another funtion that is executed every frame, `OnMovementModeChanged`, then runs the `OnEnterWallRun` function. Notice also how when the state changes away from `CMoveWallRun`, the `OnExitWallRun` function will likewise be called.
+![](/assets/project-mercury/OnEnterWallRun.png)
+![](/assets/project-mercury/OnExitWallRun.png)
+This architecture ensures that the state of the system is properly managed. Any code that needs to be executed at the start or end of a movement mode can be placed here, and it will run, regardless of how many possible places the movement mode could begin or be cancelled at.
+Continuing on with the code, the base class executes the `PhysCustom` function due to being in a derived class movement mode. The override `PhysCustom` then just needs to forward to a dedicated `Phys*` function depending on the specific movement mode.
+![](/assets/project-mercury/PhysCustom.png)
+At long last, the code finally reaches the code that actually wallruns the player, `PhysWallRun`.
+The function itself is long, so only the important sections are shown here.
+![](/assets/project-mercury/PhysWallRun_Break.png)
+Firstly, the code re-checks that the conditions for starting a wall-run are still being met. It also checks here to see how long has elapsed since the wallrun started, and exits the move mode if the allotted wall run time has expired;
+![](/assets/project-mercury/PhysWallRun_PlaneProject.png)
+Then, the player's acecleration and velocity are projected onto the plane of the wall. This is what sticks the player to wall so they don't come off of it unless they indend to.
+Here is also shown how the gravity is applied based on the altitude of the player's view direction. That is, they'll continue moving at the same height on the wall, unless they look downwards. This prevents the very unituitive situation where the player is looking down and holding the forward input, but moves upwards relative to the camera.
+![](/assets/project-mercury/PhysWallRun_Rotate.png)
+Another nice feature of this wallrunning implementation is that the player is gently rotated while running, such that their look direction stays the same relative to the part of the wall they're currently contacting. This removes the need to move the look input while running around a curved wall, and creates the feeling of being carried around the turn by the wall.
+![](/assets/project-mercury/PhysWallRun_Apply.png)
+The actual movement portion of this movement mode is very succint. Other than some minor checks and safe-guards, the player is moved by their velocity in the direction of their acceleration (which are now both clamped to be in the plane of the wall) and one additional stick force is applied into the wall. This is to ensure contact with the wall remains even when running a sharp concave surface.
+Lastly, one of the more important parts of this system to recreating the feel of Titanfall 2 is the specific conditions that must be met and/or remain met in order to wall run.
+![](/assets/project-mercury/CanWallRun.png)
+The `CanWallRun` function is responsible for checking the current state, and determining whether a wall run can be started. It ensures that the player is not on the ground and falling down. It then forwards the check to see if the player is up against a suitable wall to the `CheckForWall` function, which returns a UE5 `FHitResult` struct with all of the information of the best successful raycast for a wall.
+It then completes the same logic as Titanfall does to prevent increasing height on the same wall; A change in the wall ran on (approximated by a large change in normal as compared to the last surface the player wall ran on), seeing if enough time has passed since running on this wall, or seeing that the height is lower than previously ran on. This allows for wall running and gaining height by jumping between walls, re-attaching to the same wall if height is not gained, and allows any wall running if the cooldown since the last wall run have expired.
+This sort of logic is where the start guards, like `OnEnterWallRun` and `OnExitWallRun` are important, to ensure that everything is always in a valid state for logic like to work.
+
+
+
 
 ##### Designer Friendly Programming
 All of the low-level physics code I created for the movement component is endlessly tweakable and modifiable via UPROPERTYs, so that designer can independently tune in the feel of the component based on player feedback for tight iteration cycles.
