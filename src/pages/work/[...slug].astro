@@ -18,7 +18,6 @@ interface Props {
 // https://docs.astro.build/en/core-concepts/routing/#dynamic-routes
 export async function getStaticPaths() {
 	const work = await getCollection('work');
-	console.log(work)
 	return work.map((entry) => ({
 		params: { slug: entry.id },
 		props: { entry },
