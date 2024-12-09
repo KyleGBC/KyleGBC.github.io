@@ -12,6 +12,10 @@ tags:
 ---
 import Grid from '../../components/Grid.astro'
 import Video from '../../components/Video.astro'
+import remarkToc from 'remark-toc'
+
+## Contents
+
 
 ## Overview
 Project Mercury was developed by a team of 14 people over the course of one college semester. The goal of the game was to create a fast-paced first person shooter game that would allow us to gain experience working with Unreal Engine 5. We were inspired by games like Titanfall 2, Mirror's Edge, and Ghostrunner, and decided to create a game particulary inspired by the technical movement mechanics present in those titles. Project Mercury is an adreneline-inducing mix of run and gun action against the backdrop of the rainy neo-futuristic late 21st century Detroit skyline. 
@@ -138,3 +142,15 @@ The actual deadeye ability is a combination of helper functions and one behemoth
 This is responsible for camera effects, moving the view to each target, and shooting.
 ![](/assets/project-mercury/deadeye_impl.png)
 
+### Miscellaneous
+A brief mention on some other tasks I worked on.
+#### Environment Searchlight Drones
+In addition to the pre-set spline-based environmental drones, I wanted to make the environment feel more hostile. I created a very simple and partially random searchlight drone system. 
+By simply placing down points-of-interest in the level, designers can create areas that drones will randomly move between and investigate. 
+My goal was to create a sense of being hunted. Like the other environmental drones, they can be shot to explode, to help tutorialize the player.
+<Video path='/assets/project-mercury/drones.webm'/>
+#### Curved UI Material
+In order to create the feeling of the HUD being projected in front of the player on a helmet interior, we wanted to have a curve to the UI elements. I wasn't satisifed with any of the existing tutorials I could find, so armed with my nearly non-existant knowledge of shader code, I tried my hand at making my own from scratch. I was able to get something I was pretty happy with.
+![](/assets/project-mercury/curve-shader-code.png)
+![](/assets/project-mercury/curve-uv-checker.png)
+![](/assets/project-mercury/curve-in-game-2.png)
