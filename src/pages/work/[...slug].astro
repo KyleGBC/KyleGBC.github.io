@@ -9,8 +9,6 @@ import Icon from '../../components/Icon.astro';
 import Pill from '../../components/Pill.astro';
 import { render } from 'astro:content';
 
-import { Content as fdContent } from 'fulldev-ui/blocks/Content.astro'
-
 interface Props {
 	entry: CollectionEntry<'work'>;
 }
@@ -20,10 +18,12 @@ interface Props {
 // https://docs.astro.build/en/core-concepts/routing/#dynamic-routes
 export async function getStaticPaths() {
 	const work = await getCollection('work');
+	console.log(work)
 	return work.map((entry) => ({
 		params: { slug: entry.id },
 		props: { entry },
 	}));
+	
 }
 
 const { entry } = Astro.props;
