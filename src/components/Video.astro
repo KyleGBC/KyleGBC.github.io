@@ -10,15 +10,24 @@ const { title, width, height, path } = Astro.props;
 ---
 
 <video
+    class="video"
     id={title}
-    class="video.js"
     autoplay
-    width={width}
-    height={height}
+    muted
     loop
 >
     <source src={path} type="video/webm">
-    <p class="vjs-no-js">
-        Video is not available, make sure Javascript is enabled
-    </p>
 </video>
+
+<style>
+    .video
+    {
+        width: 100%;
+        margin: 0 auto;
+        border-radius: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        background: var(--gradient-subtle);
+        border: 1px solid var(--gray-800);
+        overflow: hidden;
+    }
+</style>
