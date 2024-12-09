@@ -34,10 +34,13 @@ And several other miscellaneous tasks.
 In a first person game, the character controller is an oft overlooked factor in the overall feeling of fun and polish apparent to players. It affects nearly every single interaction they have whilst playing, yet a good first-person controller should be as intuitive as possible, and far from the front of the player's mind. If the player notices the controller, it's likely because it behaved in way that was not intended by their inputs. This only serves to interrupt their immersion and flow, and is a trademark of poorly programmed games.
 
 ##### Reverse Engineering
-In order to develop an excellent movement component, we looked towards a game with one of the most loved movements systems - Titanfall 2
+In order to develop an excellent movement component, we looked towards a game with one of the most loved movements systems - Titanfall 2.
 My work on the character controller for this game could be summarized as trying to reverse engineer what made Titanfall's movement so fluid and addicting.
 
 This was an ongoing process, but I learned so much about how the creators of that game implemented their iconic parkour system, and I took what I learned to create a stripped-down and simplified, but still fun, version into our game.
+
+##### Features
+
 
 ##### Wall Running
 The most important aspect of the movement system in Project Mercury is the wallrunning. It's logic begins here:
@@ -66,12 +69,18 @@ Lastly, one of the more important parts of this system to recreating the feel of
 The `CanWallRun` function is responsible for checking the current state, and determining whether a wall run can be started. It ensures that the player is not on the ground and falling down. It then forwards the check to see if the player is up against a suitable wall to the `CheckForWall` function, which returns a UE5 `FHitResult` struct with all of the information of the best successful raycast for a wall.
 It then completes the same logic as Titanfall does to prevent increasing height on the same wall; A change in the wall ran on (approximated by a large change in normal as compared to the last surface the player wall ran on), seeing if enough time has passed since running on this wall, or seeing that the height is lower than previously ran on. This allows for wall running and gaining height by jumping between walls, re-attaching to the same wall if height is not gained, and allows any wall running if the cooldown since the last wall run have expired.
 This sort of logic is where the start guards, like `OnEnterWallRun` and `OnExitWallRun` are important, to ensure that everything is always in a valid state for logic like to work.
+![](/assets/project-mercury/CheckForWall.png)
+The `CheckForWall` function is likewise important. Rather than simply ray casting left and right like many, many, many wallrunning implementations readily found, this function casts a set number of rays in a circle. This allows for wallrunning without requiring that the player's look direction be locked directly along the wall. This allows for the same fluidity of looking and aiming when on a wall as there is on the ground.
+A raycast that collides a wall is only considered valid if the wall is close enough to vertical and if the player's velocity and acceleration are both sufficiently pointing into the wall. Of the valid hits in the circle, the closest is selected to represent the current wall.
 
-
-
-
+#### Developer Extensibility
+As I have just shown, the custom character movement component is structured such that adding new movement mechanics could be done very efficiently. A lot of movement mode implementation can follow the same basic pattern of
+  - Adding a new enum variant to the movement mode enum.
+  - Creating a `Can*` function (or for some actions, a `Try*` function is more appropriate), which checks the current state, and returns whether the state should be entered, as well as any information gathered necessary to carry out the state. For instance, the `CanWallRun` function has an out-parameter of type FHitResult, which will contain the most success raycast-to-wall hit after it concludes.
+  - Adding a `Phys*` function.
+  - Adding any state-tracking in `OnEnter*` and `OnExit*` functions.
 
 ##### Designer Friendly Programming
 All of the low-level physics code I created for the movement component is endlessly tweakable and modifiable via UPROPERTYs, so that designer can independently tune in the feel of the component based on player feedback for tight iteration cycles.
 
-##### 
+##### Delegates and Points System
