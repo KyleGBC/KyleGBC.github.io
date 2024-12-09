@@ -85,7 +85,7 @@ This sort of logic is where the start guards, like `OnEnterWallRun` and `OnExitW
 The `CheckForWall` function is likewise important. Rather than simply ray casting left and right like many, many, many wallrunning implementations readily found, this function casts a set number of rays in a circle. This allows for wallrunning without requiring that the player's look direction be locked directly along the wall. This allows for the same fluidity of looking and aiming when on a wall as there is on the ground.
 A raycast that collides a wall is only considered valid if the wall is close enough to vertical and if the player's velocity and acceleration are both sufficiently pointing into the wall. Of the valid hits in the circle, the closest is selected to represent the current wall.
 
-### Developer Extensibility
+#### Developer Extensibility
 As I have just shown, the custom character movement component is structured such that adding new movement mechanics could be done very efficiently. A lot of movement mode implementation can follow the same basic pattern of
   - Adding a new enum variant to the movement mode enum.
   - Creating a `Can*` function (or for some actions, a `Try*` function is more appropriate), which checks the current state, and returns whether the state should be entered, as well as any information gathered necessary to carry out the state. For instance, the `CanWallRun` function has an out-parameter of type FHitResult, which will contain the most success raycast-to-wall hit after it concludes.
@@ -94,5 +94,20 @@ As I have just shown, the custom character movement component is structured such
 
 #### Designer Friendly Programming
 All of the low-level physics code I created for the movement component is endlessly tweakable and modifiable via UPROPERTYs, so that designer can independently tune in the feel of the component based on player feedback for tight iteration cycles.
+![](/assets/project-mercury/details_panel.png)
+![](/assets/project-mercury/details_panel_2.png)
 
-#### Delegates and Points System
+### Grenade System
+Another system I contributed to the project is the grenade system (also called "lethal" system, internally). Developing the grenades gave me the chance to experience creating a highly reusable and adaptable system in Unreal Engine.
+#### `LethalSystem` Component
+![](/assets/project-mercury/lethal_system_component.png)
+The main driver of the system is the Actor Component, `LethalSystem`. This component represents a user of the grenades and an inventory of sorts, with the concept of a list of available lethals, an index of which one is "selected", and a map of remaining cooldowns. That list is player-centric, but the `LethalSystem` also contains all of the methods necessary for using grenades, and can be used without the concept of cooldowns or currently indexed grenade. This makes it perfectly suitable to be re-used for an enemy attack of lobbing grenades, for example.
+Where a player class might use the component by changing the selected index and then calling `TrySpawnSelectedLethal`...
+![](/assets/project-mercury/player_spawn_lethal.png)
+and then at a later time (probably when the player releases whichever button), calling `ThrowLethal`
+
+While an enemy might set the random weighting for its available lethals, set cooldowns ignored, and call `TrySpawnRandomLethal` and `ThrowLethal` together...
+![](/assets/project-mercury/enemy_spawn_lethal.png)
+But both use the same internal implementation
+![](/assets/project-mercury/spawn_lethal.png)
+### Base_Lethal
