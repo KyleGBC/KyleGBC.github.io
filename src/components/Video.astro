@@ -1,0 +1,24 @@
+---
+interface Props {
+	title?: string | undefined;
+    width: string;
+    height: string;
+    path: string;
+}
+
+const { title, width, height, path } = Astro.props;
+---
+
+<video
+    id={title}
+    class="video.js"
+    autoplay
+    width={width}
+    height={height}
+    loop
+>
+    <source src={path} type="video/webm">
+    <p class="vjs-no-js">
+        Video is not available, make sure Javascript is enabled
+    </p>
+</video>
