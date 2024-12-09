@@ -129,5 +129,12 @@ If the situation demanded any expansion of functionality past grenades, this sys
 In order to make gameplay more dynamic and reward the player for utilizing their movement skills, Project Mercury includes a special skill called Deadeye.
 As the player uses their movement system, they are rewarded points, depending on their skill in using the movement ability, as well as their skill in chaining together movement skills without interruption.
 <Video path="/assets/project-mercury/deadeye_2.webm"/>
-
+The Deadeye system functions by subscribing to delegates on the aforementioned player controller, which listen for each movement skill, and checking on a movement mode change to see if the combo has broken.
+![](/assets/project-mercury/deadeye_delegates.png)
+It tracks the current combo count and calulates the actual points to add based on the combo.
+![](/assets/project-mercury/deadeye_delegates2.png)
+The actual deadeye ability is a combination of helper functions and one behemoth event graph routine.
+![](/assets/project-mercury/deadeye_helpers.png)  
+This is responsible for camera effects, moving the view to each target, and shooting.
+![](/assets/project-mercury/deadeye_impl.png)
 
