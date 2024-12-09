@@ -13,10 +13,10 @@ tags:
 import Grid from '../../components/Grid.astro'
 import Video from '../../components/Video.astro'
 
-### Overview
+## Overview
 Project Mercury was developed by a team of 14 people over the course of one college semester. The goal of the game was to create a fast-paced first person shooter game that would allow us to gain experience working with Unreal Engine 5. We were inspired by games like Titanfall 2, Mirror's Edge, and Ghostrunner, and decided to create a game particulary inspired by the technical movement mechanics present in those titles. Project Mercury is an adreneline-inducing mix of run and gun action against the backdrop of the rainy neo-futuristic late 21st century Detroit skyline. 
 
-### Technical Contributions
+## Technical Contributions
 I worked as a general programmer for Project Mecury, but mainly worked on systems programming or lower level components written in C++. My contributions include:
  - A robust, complete, and polished character controller. Since a main focus of our game's identity and feel was the presence of an intuitive and polished movement system, I was entrusted to develop, implement, and iterate on our first person character controller. Over the development cycle, this was my most important task.
 
@@ -31,42 +31,30 @@ I worked as a general programmer for Project Mecury, but mainly worked on system
 And several other miscellaneous tasks.
 
 
-#### Advanced Movement
+### Advanced Movement
 In a first person game, the character controller is an oft overlooked factor in the overall feeling of fun and polish apparent to players. It affects nearly every single interaction they have whilst playing, yet a good first-person controller should be as intuitive as possible, and far from the front of the player's mind. If the player notices the controller, it's likely because it behaved in way that was not intended by their inputs. This only serves to interrupt their immersion and flow, and is a trademark of poorly programmed games.
 
-##### Reverse Engineering
+#### Reverse Engineering
 In order to develop an excellent movement component, we looked towards a game with one of the most loved movements systems - Titanfall 2.
 My work on the character controller for this game could be summarized as trying to reverse engineer what made Titanfall's movement so fluid and addicting.
 
 This was an ongoing process, but I learned so much about how the creators of that game implemented their iconic parkour system, and I took what I learned to create a stripped-down and simplified, but still fun, version into our game.
 
-##### Features
-Wall-running
-<Video
-  width='640'
-  height='480'
-  path='/assets/project-mercury/wallrunning.webm'
-/>
-Sliding
-<Video
-  width='640'
-  height='480'
-  path='/assets/project-mercury/slide.webm'
-/>
-Crouching and Walking
-<Video
-  width='640'
-  height='480'
-  path='/assets/project-mercury/crouch_and_walk.webm'
-/>
-Mantling and Vaulting
-<Video
-  width='640'
-  height='480'
-  path='/assets/project-mercury/mantle_and_vault.webm'
-/>
+#### Features
+##### Wall-running
+<Video path='/assets/project-mercury/wallrunning.webm' />
+Wallrunning occurs whenever the player is falling towards an appropriately angled wall. A circular raycast method allows for free aiming while running.
+##### Crouching and Walking
+<Video path='/assets/project-mercury/crouch_and_walk.webm' />
+Crouching is a custom implementation that smoothly changes the player's collider for the best accuracy.
+##### Sliding
+<Video path='/assets/project-mercury/slide.webm'/>
+Sliding is a physics-based implementation that gains speed down slopes. Slide jumping gives a quick burst of vertical mobility.
+##### Mantling and Vaulting
+<Video path='/assets/project-mercury/mantle_and_vault.webm' />
+Mantling and vaulting allow for smoothly moving about the level without getting tripped up on level geometry.
 
-##### Wall Running
+#### Wall Running Technical Breakdown
 The most important aspect of the movement system in Project Mercury is the wallrunning. It's logic begins here:
 ![](/assets/project-mercury/UpdateCharacterStateBeforeMovement.png)
 The base class implementation of the CharacterMovementComponent executes this function at the end of every frame to see if the current movement mode has changed. If the character is falling, and the the `CanWallRun` function returns true, the state is changed to initiate a wallrun.
@@ -97,14 +85,14 @@ This sort of logic is where the start guards, like `OnEnterWallRun` and `OnExitW
 The `CheckForWall` function is likewise important. Rather than simply ray casting left and right like many, many, many wallrunning implementations readily found, this function casts a set number of rays in a circle. This allows for wallrunning without requiring that the player's look direction be locked directly along the wall. This allows for the same fluidity of looking and aiming when on a wall as there is on the ground.
 A raycast that collides a wall is only considered valid if the wall is close enough to vertical and if the player's velocity and acceleration are both sufficiently pointing into the wall. Of the valid hits in the circle, the closest is selected to represent the current wall.
 
-#### Developer Extensibility
+### Developer Extensibility
 As I have just shown, the custom character movement component is structured such that adding new movement mechanics could be done very efficiently. A lot of movement mode implementation can follow the same basic pattern of
   - Adding a new enum variant to the movement mode enum.
   - Creating a `Can*` function (or for some actions, a `Try*` function is more appropriate), which checks the current state, and returns whether the state should be entered, as well as any information gathered necessary to carry out the state. For instance, the `CanWallRun` function has an out-parameter of type FHitResult, which will contain the most success raycast-to-wall hit after it concludes.
   - Adding a `Phys*` function.
   - Adding any state-tracking in `OnEnter*` and `OnExit*` functions.
 
-##### Designer Friendly Programming
+#### Designer Friendly Programming
 All of the low-level physics code I created for the movement component is endlessly tweakable and modifiable via UPROPERTYs, so that designer can independently tune in the feel of the component based on player feedback for tight iteration cycles.
 
-##### Delegates and Points System
+#### Delegates and Points System
