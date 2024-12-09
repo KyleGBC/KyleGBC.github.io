@@ -18,15 +18,15 @@ Project Mercury was developed by a team of 14 people over the course of one coll
 
 ## Technical Contributions
 I worked as a general programmer for Project Mecury, but mainly worked on systems programming or lower level components written in C++. My contributions include:
- - A robust, complete, and polished character controller. Since a main focus of our game's identity and feel was the presence of an intuitive and polished movement system, I was entrusted to develop, implement, and iterate on our first person character controller. Over the development cycle, this was my most important task.
+ - [A robust, complete, and polished character controller](#advanced-movement). Since a main focus of our game's identity and feel was the presence of an intuitive and polished movement system, I was entrusted to develop, implement, and iterate on our first person character controller. Over the development cycle, this was my most important task.
 
     &nbsp; 
     &nbsp; 
- - A reusable and extensible throwable items system, used for the 4 different types of grenades in Project Mercury; two for the player's use, and two for the enemies'.
+ - [A reusable and extensible throwable items system](#grenade-system), used for the 4 different types of grenades in Project Mercury; two for the player's use, and two for the enemies'.
 
     &nbsp; 
     &nbsp; 
- - A complete and polished special skill, inspired by the Deadeye ability from Read Dead Redemption 2 and Cassidy's High Noon Ultimate from Overwatch. This is accompanied by a reactive points system that tracks and charges up based on the player's ability to maintain their momentum through the level.
+ - [A complete and polished special skill](#deadeye-ability-and-system), inspired by the Deadeye ability from Read Dead Redemption 2 and Cassidy's High Noon Ultimate from Overwatch. This is accompanied by a reactive points system that tracks and charges up based on the player's ability to maintain their momentum through the level.
 
 And several other miscellaneous tasks.
 
@@ -125,3 +125,9 @@ Additionally, the `LethalSystem` was made to operate on `LethalComponent`-derive
 If the situation demanded any expansion of functionality past grenades, this system would be easily expandable.
 
 ### Deadeye Ability and System
+<Video path="/assets/project-mercury/deadeye_1.webm"/>
+In order to make gameplay more dynamic and reward the player for utilizing their movement skills, Project Mercury includes a special skill called Deadeye.
+As the player uses their movement system, they are rewarded points, depending on their skill in using the movement ability, as well as their skill in chaining together movement skills without interruption.
+<Video path="/assets/project-mercury/deadeye_2.webm"/>
+
+
