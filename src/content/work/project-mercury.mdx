@@ -110,4 +110,18 @@ While an enemy might set the random weighting for its available lethals, set coo
 ![](/assets/project-mercury/enemy_spawn_lethal.png)
 But both use the same internal implementation
 ![](/assets/project-mercury/spawn_lethal.png)
-### Base_Lethal
+#### `LethalComponent` Component Hierarchy
+The base `LethalComponent` is a convenient base class for anything that exhibits grenade-like functionality, and with it's default settings, operates like a prototypical frag grenade.
+Any more complicated grenade effects, like for instance the R1C0CH3-T grenade, are able to override the base class with their specific functionality for each event.
+    
+Early on in development, the `LethalSystem` operated solely on blueprints derived from a blueprint called `BP_BaseLethal`. However, the plan then arose (and was later scrapped) to have gun pickups be tossable for an explosion after running out of ammunition.
+Since this functionality is esentially a grenade, it would be nice to reuse the existing LethalSystem. The guns already had a class hierarchy however. This exposed a mistake in the original grenade system, where the grenade functionality was tightly coupled to one specific blueprint. 
+![](/assets/project-mercury/old_lethals.png)
+After a refactoring, the lethal blueprints are simply the geometry, visuals, and a particular child of `LethalComponent`. This allows any functionality to be easily attached to anything that needs to be "grenade-like".
+![](/assets/project-mercury/new_lethals.png)
+Additionally, the `LethalSystem` was made to operate on `LethalComponent`-derived things for some functionality, but anything not grenade specific uses a `Throwable` Interface instead.  
+![](/assets/project-mercury/throwable.png)
+
+If the situation demanded any expansion of functionality past grenades, this system would be easily expandable.
+
+### Deadeye Ability and System
