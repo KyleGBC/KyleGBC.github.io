@@ -40,7 +40,10 @@ const { Content } = await render(entry);
 							<div class="tags">
 								{entry.data.tags.map((t) => <Pill>{t}</Pill>)}
 							</div>
-							<p class="description">{entry.data.description}<a href={entry.data.link}>Check It Out!</a></p>
+							<div class="description">
+								<p>{entry.data.description}</p>
+								{entry.data.link && <a href={entry.data.link}>Check it out!</a>}
+							</div>
 						</div>
 					</Hero>
 				</div>
@@ -85,6 +88,8 @@ const { Content } = await render(entry);
 	.description {
 		font-size: var(--text-lg);
 		max-width: 54ch;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.content {
