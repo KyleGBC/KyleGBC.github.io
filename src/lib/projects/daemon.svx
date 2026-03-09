@@ -21,19 +21,27 @@ Daemon served as both an excellent showcase of the each individual's skills up t
 Since one of the main goals of the project was to create a multiplayer title that any player could pick up and immediately enjoy, we were inspired by existing games and modes like Flashpoint in Overwatch and Hardpoint in Call of Duty.
 Daemon expands on the easily-understood mechanics of a capture-the-point style game mode by allowing players to create custom tactical and expressive loadouts via the "create-a-class" Armory and Build Credits systems.
 
-Thanks! :wave:
 
 # Technical Contributions
+
+On Daemon, I worked on setting the game up to use Unreal Engine's built-in game networking utilites and the core game systems that operate the games modes. My main contributions to the projets were:
+
+	- Integration of Epic Online Services for multiplayer connectivity. As the most important component of Daemon to get working was the online aspect, this was the first priority for me to work on. 
+	- A match manager to handle running the game mode, controlling player spawns, respawns, and team logic.
+	- A dynamic objective system to unify the different objective types that were originally planned for Daemon.
+
 ## Online Networking Integration
-## Game Manager Systems
-### Core Game Loop
-### Spawn, Respawn, and Team Management
-### Bounty Point System (Cut)
+At the beginning of the projct, I investigated several different services that we considered using in order to host Daemon. From the start, we decided that it made sense for the current scope of Daemon that it made the msot sense to use a peer-to-peer model rather than have a dedicated server that all clients would connect to. This had the large benefit of not needing to pay a server host when we knew that it would only be played itermittently. We also knew that if the player demand or network perforamnce demanded it, we could switch to a client-server model relatively easy, thanks to how peer-to-peer is architected in UE; Unreal Engine, even when playing a single player game, is secretly a networked game that uses the null online subsystem and only has one player. In peer-to-peer, the hosting player is essentially a server that the hosting player is playing directly on. This way, most of the game logic would not need to be adjusted in order to use a dedicated server.
+
+With this in mind, we decided to use Epic Online Services, mainly because it was (unsurprisingly) the easiest to setup in UE, was free within limits we knew we would be within, and doubled as a way to allow authentication with Epic Games Store accounts. EOS is offered by Epic as a plugin for Unreal Engine through the in-engine plugin manager, which simplifies the setup and enables the matching online subsytem to route network information through the standaloe EOS SDK that handles actually talking to Epic's servers. This *mostly* works, but in the end we still ended up having to tweak the engine config file (`DefaultEngine.ini`) in arcane and under-documented ways in order to get it working correctly.
+
+
+## Game Manager System
+Following the trend of being able to build on Unreal's nice abstractions, Unreal provides a bevy of exstensible classes related to game modes and players within them in the Unreal Gameplay Framework. Namely, `GameMode`, `GameState` and `PlayerState`, each of which interact with the others and with the other better-known members of the framework like `Pawn`/`Character` and `Controller`/`PlayerController`. In Unreal Engine, Actors are owned by one of the network entities and are optionally replicated to the other members. `GameMode` exists only on the server and is responsible for managing the shared game state and includes some state machine logic for moving the server between lobby state (e.g.`WaitingToStart`, `InProgress`). Since the `GameMode` is not replicated, in order for clients to understand anything about the match and lobby state, the GameMode stores any information that should be known to clients in an associated `GameState` which *is* replicated to clients. Lastly there's also `PlayerState`, which is the same as `GameState` but the server instead creates one for each connected player to hold information specific to them. 
+
+In Daemon, adding new logic to the match flow is as simple as extending those classes into `MudcraftGameState`, `MudcraftGameMode`, and `MudcraftPlayerState` (note to the reader: Mudcraft Reloaded is the internal dev name for Daemon.) Where necessary, these themsevles are subclassed further into e.g. `RkhGameMode` and `GgGameMode` to specify the behaviors of our the individual game modes where different. The main game loop of Daemon was created by creating custom subststates within the `InProgress` state of the game mode for the buy phase, main phase, and post match time. 
+
 ## Objective Systems
-### Modular Objective System
-### Objective Sketch Designer Tool
-## Miscellaneous
-### Animation implementation
-### "Halo-style" ADS Zoom
-### Custom Movement Component port
-### Environmental Props
+Originally, Daemon was going to feature a gameplay element akin to jungling in a MOBA; There would be objective points scattered around the map, which would randomly cycle between being an Armory to buy items, a Hardpoint to earn score towards victory, and a Bounty Rock that could be destroyed to earn Bounty Points to be exchangd for items at the Armory. I was responsible for creating the system that managed the different states an objective could go and handling the lifecycle events they had and making it easy for designers to drag and drop and easily confgure new objective points, and getting these to interact well with art and design goals such as integrating different VFX synced to gameplay information for each and allowing designers to tweak each aspect for better map flow.
+
+In order to support different map layouts, I also hooked into some existing dynamic mesh generation editor tools in order to allow designers to draw the shapes of capture / shop areas as any extruded polgyon, and have the collision, gameplay, and associated visuals all automatically generate. In the end, the objective design in Daemon was greatly simplified after playtester feedback, and so the majority of these features are not present in the release version of the game.
