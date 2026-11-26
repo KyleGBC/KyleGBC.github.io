@@ -9,7 +9,7 @@
         <p class="font-mono text-muted-foreground">Currently pursuing a graduate degree in high-performance computer architecture at the Georgia Insitute of Technology.</p>
         <a class="font-mono bg-card rounded-sm border-2 border-border hover:border-primary mt-4 inline-block py-2 px-3" href="/kyle_roleson_resume.pdf" download>
             <p>Download Resume</p>
-            <p class="font-mono text-muted-foreground text-xs">Updated Mar. 2026</p>
+            <p class="font-mono text-muted-foreground text-xs">Updated Nov. 2026</p>
         </a>
     </div>
 </Section>

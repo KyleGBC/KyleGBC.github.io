@@ -11,11 +11,11 @@
         <div class="grid grid-col-2 gap-4">
             <Field.Field class="col-1">
                 <Field.Label for="name">Name</Field.Label>
-                <Input id="name" name="name" placeholder="Bjarne Stroustrup"/>
+                <Input id="name" name="name"/>
             </Field.Field>
             <Field.Field class="col-2">
                 <Field.Label for="email">Email</Field.Label>
-                <Input id="email" name="email" placeholder="bjarne@stroustrup.com" type="email"/>
+                <Input id="email" name="email" type="email"/>
             </Field.Field>
         </div>
         <Field.Field>

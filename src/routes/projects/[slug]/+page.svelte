@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ProjectModule } from '$lib/types/projects.js';
+    import { ExternalLink } from '@lucide/svelte'
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 
     const { params, data } = $props();
@@ -15,7 +16,14 @@
             <div class="w-full h-full bg-background absolute"></div>
             <img class="mask-b-from-20% rounded-sm mask-b-to-80% aspect-video w-full z-10" src={project.metadata.image} alt={project.metadata.imageAlt}/>
         </div>
-        <h1 class="text-5xl font-logo mb-4">{project.metadata.title}</h1>
+        <h1 class="text-5xl font-logo mb-4">
+            {project.metadata.title}
+            {#if project.metadata.link}
+                 <a href={project.metadata.link} rel="noopener noreferrer" class="text-zinc-600 hover:text-zinc-800 dark:hover:text-zinc-400 transition-colors">
+                    <ExternalLink size={24} class="inline"/>
+                </a>
+            {/if}
+        </h1>
         <p class="text-md font-mono text-zinc-600 mb-10">{project.metadata.description}</p>
         <Separator orientation="horizontal" class="self-end flex-1"/>
     </div>
